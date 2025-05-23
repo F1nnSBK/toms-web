@@ -4,11 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ThHomeControllerImpl {
+public class ThHomeControllerImpl implements ThHomeController {
 
     @GetMapping("/")
+    @Override
     public String home() {
-        return "base";
+        return "index";
     }
 
 }
