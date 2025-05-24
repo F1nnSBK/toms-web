@@ -1,0 +1,33 @@
+package com.toms.app.dto;
+
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ItemDTO {
+
+    private Long id;
+
+    @NotBlank(message = "Name cannot be blank")
+    private String name;
+
+    private String description;
+
+    private String image;
+
+    private String category;
+
+    private String quantity;
+
+    @NotBlank(message = "Online status cannot be blank")
+    private boolean onlineStatus;
+
+}
+

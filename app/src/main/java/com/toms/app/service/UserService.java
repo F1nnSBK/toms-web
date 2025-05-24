@@ -1,16 +1,14 @@
 package com.toms.app.service;
 
-import com.toms.app.model.User;
+import com.toms.app.dto.UserDTO;
+
 
 import java.util.List;
 
 public interface UserService {
-    void addUser(
-            String username,
-            String password,
-            String email,
-            String role,
-            String phone);
-
-    List<User> findAllUsers();
+    UserDTO addUser(UserDTO user);
+    UserDTO updateUser(UserDTO updatedUser);
+    List<UserDTO> findAllUsers();
+    UserDTO getUserById(long id);
+    void removeUserById(long id);
 }

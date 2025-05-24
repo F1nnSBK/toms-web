@@ -1,17 +1,24 @@
 package com.toms.app.controller;
 
-import com.toms.app.model.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.toms.app.dto.UserDTO;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public interface UserController {
 
+    @PutMapping("/{userId}")
+    UserDTO updateUser(@PathVariable("userId") Long userId, @RequestBody UserDTO user);
+
     @PostMapping("/")
-    String addUser(@RequestBody User user);
+    UserDTO addUser(@RequestBody UserDTO user);
 
     @GetMapping("/")
-    List<User> findAllUsers();
+    List<UserDTO> findAllUsers();
+
+    @GetMapping("/{userId}")
+    UserDTO getUserById(@PathVariable("userId") Long userId);
+
+    @DeleteMapping("/{userId}")
+    void removeUserById(@PathVariable("userId") Long userId);
 }

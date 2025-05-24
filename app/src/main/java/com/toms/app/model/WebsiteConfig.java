@@ -22,7 +22,7 @@ public class WebsiteConfig {
     private String title;
     private String description;
     private String keywords;
-    private int copyright;
+
     private String googleAnalytics;
     private String googleTagManager;
 
@@ -34,13 +34,11 @@ public class WebsiteConfig {
         this.title = title;
         this.description = description;
         this.keywords = keywords;
-        this.copyright = LocalDateTime.now().getYear();
         this.googleAnalytics = googleAnalytics;
         this.googleTagManager = googleTagManager;
     }
 
     public WebsiteConfig(String title) {
         this.title = title;
-        this.copyright = LocalDateTime.now().getYear();
     }
 }
