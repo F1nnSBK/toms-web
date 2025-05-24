@@ -1,6 +1,7 @@
 package com.toms.app.controller;
 
 import com.toms.app.dto.UserDTO;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.List;
 public interface UserController {
 
     @PutMapping("/{userId}")
-    UserDTO updateUser(@PathVariable("userId") Long userId, @RequestBody UserDTO user);
+    UserDTO updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDTO user);
 
     @PostMapping("/")
-    UserDTO addUser(@RequestBody UserDTO user);
+    UserDTO addUser(@Valid @RequestBody UserDTO user);
 
     @GetMapping("/")
     List<UserDTO> findAllUsers();

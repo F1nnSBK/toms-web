@@ -2,6 +2,7 @@ package com.toms.app.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class ItemDTO {
 
     private String quantity;
 
-    @NotBlank(message = "Online status cannot be blank")
+    @NotNull(message = "Online status cannot be blank")
     private boolean onlineStatus;
 
 }

@@ -3,6 +3,7 @@ package com.toms.app.controller;
 import com.toms.app.dto.UserDTO;
 import com.toms.app.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @PostMapping("/")
-    public UserDTO addUser(@RequestBody UserDTO user) {
+    public UserDTO addUser(@Valid @RequestBody UserDTO user) {
         try {
             return userService.addUser(user);
         } catch (Exception e){
@@ -47,7 +48,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserDTO updateUser(@PathVariable("userId") Long userId, @RequestBody UserDTO user) {
+    public UserDTO updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDTO user) {
         user.setId(userId);
         try {
             return userService.updateUser(user);
