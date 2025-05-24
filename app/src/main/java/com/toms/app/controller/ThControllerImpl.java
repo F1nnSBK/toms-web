@@ -20,7 +20,7 @@ public class ThControllerImpl implements ThController {
     @GetMapping("/")
     @Override
     public ModelAndView home() {
-        List<ItemDTO> featuredItems = this.itemService.getAllItems();
+        List<ItemDTO> featuredItems = this.itemService.getFeaturedItems();
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("featuredItems", featuredItems);
         return mav;

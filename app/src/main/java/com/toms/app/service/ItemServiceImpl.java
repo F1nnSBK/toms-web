@@ -7,8 +7,10 @@ import com.toms.app.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +33,14 @@ public class ItemServiceImpl implements ItemService {
         return this.itemMapper.itemsToItemDTOs(this.itemRepository.findAll());
     }
 
+    public List<ItemDTO> getFeaturedItems() {
+        if(this.itemRepository.findAll().isEmpty()) {
+            log.info("No items available");
+        }
+        List<ItemDTO> featuredItems = this.itemMapper.itemsToItemDTOs(this.itemRepository.findAll());
+        Collections.shuffle(featuredItems);
+        return featuredItems.subList(0, 4);
+    }
 
     public ItemDTO getItemById(Long id) {
         try{
