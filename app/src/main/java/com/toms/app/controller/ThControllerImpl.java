@@ -9,12 +9,21 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class ThItemsControllerImpl implements ThItemsController {
+public class ThControllerImpl implements ThController {
 
     ItemService itemService;
 
-    public ThItemsControllerImpl(ItemService itemService) {
+    public ThControllerImpl(ItemService itemService) {
         this.itemService = itemService;
+    }
+
+    @GetMapping("/")
+    @Override
+    public ModelAndView home() {
+        List<ItemDTO> featuredItems = this.itemService.getAllItems();
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("featuredItems", featuredItems);
+        return mav;
     }
 
     @GetMapping("/produkte")
@@ -27,4 +36,13 @@ public class ThItemsControllerImpl implements ThItemsController {
         return mav;
     }
 
+    @GetMapping("/kontakt")
+    public String contact() {
+        return "kontakt";
+    }
+
+    @GetMapping("/ueber-mich")
+    public String about() {
+        return "ueber-mich";
+    }
 }
