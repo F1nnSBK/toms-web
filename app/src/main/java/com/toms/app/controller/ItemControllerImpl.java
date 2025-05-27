@@ -31,7 +31,11 @@ public class ItemControllerImpl implements ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDTO getItemById(@PathVariable("itemId") Long id) {
-        return this.itemService.getItemById(id);
+        try {
+            return this.itemService.getItemById(id);
+        } catch (NoSuchElementException nse) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item by id not found");
+        }
     }
 
     @PutMapping("/{itemId}")
@@ -48,8 +52,13 @@ public class ItemControllerImpl implements ItemController {
     }
 
     @DeleteMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteItemById(@PathVariable("itemId") Long id) {
-        this.itemService.deleteItemById(id);
+        try {
+            this.itemService.deleteItemById(id);
+        } catch (NoSuchElementException nse) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/")

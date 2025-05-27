@@ -23,6 +23,7 @@ public class ItemDTO {
 
     private String image;
 
+    @NotBlank(message = "Category should not be left empty")
     private String category;
 
     private String quantity;
@@ -30,5 +31,8 @@ public class ItemDTO {
     @NotNull(message = "Online status cannot be blank")
     private boolean onlineStatus;
 
+    public Boolean getOnlineStatus() {
+        return onlineStatus;
+    }
 }
 
