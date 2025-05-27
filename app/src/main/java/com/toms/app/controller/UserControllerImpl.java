@@ -27,27 +27,47 @@ public class UserControllerImpl implements UserController {
         return userService.findAllUsers();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/id/{userId:\\d+}")
     public UserDTO getUserById(@PathVariable("userId") Long id) {
-        return this.userService.getUserById(id);
+        try {
+            return this.userService.getUserById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/{userName}")
+    public UserDTO getUserByUsername(@PathVariable("userName") String userName) {
+        try {
+            return this.userService.getUserByUsername(userName);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDTO addUser(@Valid @RequestBody UserDTO user) {
         try {
             return userService.addUser(user);
-        } catch (Exception e){
-            throw new RuntimeException("Error saving user " + user.getUsername(), e);
+        } catch (ConstraintViolationException cve){
+            throw new RuntimeException("Error saving user " + user.getUsername(), cve);
         }
 
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/id/{userId:\\d+}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeUserById(@PathVariable("userId") Long id) {
-        this.userService.removeUserById(id);
+        try{
+            this.userService.removeUserById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/id/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public UserDTO updateUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserDTO user) {
         user.setId(userId);
         try {

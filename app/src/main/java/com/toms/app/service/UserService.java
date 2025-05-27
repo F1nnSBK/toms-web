@@ -11,4 +11,5 @@ public interface UserService {
     List<UserDTO> findAllUsers();
     UserDTO getUserById(long id);
     void removeUserById(long id);
+    public UserDTO getUserByUsername(String username);
 }

@@ -64,6 +64,10 @@ public class UserServiceImpl implements UserService {
         return this.userMapper.userToUserDTO(this.userRepository.findById(id).get());
     }
 
+    public UserDTO getUserByUsername(String username) {
+        return this.userMapper.userToUserDTO(this.userRepository.findByUsername(username).get());
+    }
+
     public void removeUserById(long id) {
         this.userRepository.deleteById(id);
     }

@@ -20,6 +20,9 @@ public interface UserController {
     @GetMapping("/{userId}")
     UserDTO getUserById(@PathVariable("userId") Long userId);
 
+    @GetMapping("/{userName}")
+    public UserDTO getUserByUsername(@PathVariable("userName") String userName);
+
     @DeleteMapping("/{userId}")
     void removeUserById(@PathVariable("userId") Long userId);
 }
