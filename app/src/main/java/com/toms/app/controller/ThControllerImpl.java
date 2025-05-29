@@ -23,6 +23,7 @@ public class ThControllerImpl implements ThController {
         List<ItemDTO> featuredItems = this.itemService.getFeaturedItems();
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("featuredItems", featuredItems);
+        mav.addObject("requestURI", "/");
         return mav;
     }
 
@@ -33,16 +34,29 @@ public class ThControllerImpl implements ThController {
 
         ModelAndView mav = new ModelAndView("produkte");
         mav.addObject("items", items);
+        mav.addObject("requestURI", "/produkte");
         return mav;
     }
 
     @GetMapping("/kontakt")
-    public String contact() {
-        return "kontakt";
+    public ModelAndView contact() {
+        ModelAndView mav = new ModelAndView("kontakt");
+        mav.addObject("requestURI", "/kontakt");
+        return mav;
     }
 
     @GetMapping("/ueber-mich")
-    public String about() {
-        return "ueber-mich";
+    public ModelAndView about() {
+        ModelAndView mav = new ModelAndView("ueber-mich");
+        mav.addObject("requestURI", "/ueber-mich");
+        return mav;
     }
+
+    @GetMapping("/admin")
+    public ModelAndView admin() {
+        ModelAndView mav = new ModelAndView("admin");
+        mav.addObject("requestURI", "/admin");
+        return mav;
+    }
+
 }
