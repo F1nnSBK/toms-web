@@ -14,9 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/items/**").permitAll()
-
+                        .requestMatchers("/admin/upload").hasRole("ADMIN")
                         .requestMatchers("/admin/**", "/admin").authenticated()
                         .requestMatchers("/api/v1/items/**").authenticated()
                         .anyRequest().authenticated()
@@ -39,20 +36,15 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                         .defaultSuccessUrl("/admin", true)
-                        .failureHandler(ajaxAuthenticationFailureHandler())
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                        .permitAll()
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login?logout")
+                                .permitAll()
                 )
                 .csrf(Customizer.withDefaults());
-        return http.build();
-    }
 
-    @Bean
-    public AuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
-        return new SimpleUrlAuthenticationFailureHandler();
+        return http.build();
     }
 
     @Bean
