@@ -52,11 +52,5 @@ public class ThControllerImpl implements ThController {
         return mav;
     }
 
-    @GetMapping("/admin")
-    public ModelAndView admin() {
-        ModelAndView mav = new ModelAndView("admin");
-        mav.addObject("requestURI", "/admin");
-        return mav;
-    }
 
 }

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -30,6 +32,8 @@ public class ItemDTO {
 
     @NotNull(message = "Online status cannot be blank")
     private boolean onlineStatus;
+
+    private LocalDateTime createdAt;
 
     public Boolean getOnlineStatus() {
         return onlineStatus;

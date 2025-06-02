@@ -36,10 +36,12 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDTO> getFeaturedItems() {
         if(this.itemRepository.findAll().isEmpty()) {
             log.info("No items available");
+            return Collections.emptyList();
         }
         List<ItemDTO> featuredItems = this.itemMapper.itemsToItemDTOs(this.itemRepository.findAll());
         Collections.shuffle(featuredItems);
-        return featuredItems.subList(0, 4);
+        int numberOfItems = Math.min(featuredItems.size(), 4);
+        return featuredItems.subList(0, numberOfItems);
     }
 
     public ItemDTO getItemById(Long id) {

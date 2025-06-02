@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -54,7 +55,8 @@ public class ItemControllerImplTest {
                 "image link",
                 "category",
                 "quantity",
-                true
+                true,
+                LocalDateTime.now()
         );
 
         item02 = new ItemDTO(
@@ -64,7 +66,8 @@ public class ItemControllerImplTest {
                 "",
                 "category",
                 "",
-                false
+                false,
+                LocalDateTime.now()
         );
 
         this.items = List.of(item01, item02);
@@ -108,7 +111,7 @@ public class ItemControllerImplTest {
 
         this.mockMvc.perform(get(controllerPath + "/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(7)))
+                .andExpect(jsonPath("$.*", hasSize(8)))
                 .andExpect(jsonPath("$.id", is(item01.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(item01.getName())))
                 .andExpect(jsonPath("$.description", is(item01.getDescription())))
@@ -138,7 +141,7 @@ public class ItemControllerImplTest {
                 .content(this.objectMapper.writeValueAsString(item01))
         )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(7)))
+                .andExpect(jsonPath("$.*", hasSize(8)))
                 .andExpect(jsonPath("$.id", is(item01.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(item01.getName())))
                 .andExpect(jsonPath("$.description", is(item01.getDescription())))
@@ -202,7 +205,7 @@ public class ItemControllerImplTest {
                         .content(this.objectMapper.writeValueAsString(item01))
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.*", hasSize(7)))
+                .andExpect(jsonPath("$.*", hasSize(8)))
                 .andExpect(jsonPath("$.id", is(item01.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(item01.getName())))
                 .andDo(print());

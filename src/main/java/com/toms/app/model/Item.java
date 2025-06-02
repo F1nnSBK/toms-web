@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -28,6 +30,8 @@ public class Item {
     private String category;
 
     private String quantity;
+
+    private LocalDateTime createdAt;
 
     private boolean onlineStatus;
 

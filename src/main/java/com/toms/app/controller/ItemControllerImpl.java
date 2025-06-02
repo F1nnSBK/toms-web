@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -42,6 +43,7 @@ public class ItemControllerImpl implements ItemController {
     public ItemDTO updateItem(@PathVariable("itemId") Long id,
                               @Valid @RequestBody ItemDTO item){
         item.setId(id);
+        item.setCreatedAt(LocalDateTime.now());
         try {
             return this.itemService.updateItem(item);
         } catch (EntityNotFoundException e) {
@@ -63,6 +65,7 @@ public class ItemControllerImpl implements ItemController {
 
     @PostMapping("/")
     public ItemDTO addItem(@Valid @RequestBody ItemDTO item) {
+        item.setCreatedAt(LocalDateTime.now());
         try{
             return this.itemService.addItem(item);
         } catch (ConstraintViolationException cve) {
