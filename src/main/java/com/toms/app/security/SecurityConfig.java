@@ -44,7 +44,7 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich").permitAll()
+                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkte/**").permitAll()
                     .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
 
                     .requestMatchers("/api/v1/items/**").hasRole("API_USER")

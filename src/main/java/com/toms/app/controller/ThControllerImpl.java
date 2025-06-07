@@ -1,12 +1,13 @@
 package com.toms.app.controller;
 
-import com.toms.app.dto.ItemDTO;
-import com.toms.app.service.ItemService;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
+import com.toms.app.dto.ItemDTO;
+import com.toms.app.service.ItemService;
 
-import java.util.List;
 
 @Controller
 public class ThControllerImpl implements ThController {
@@ -51,6 +52,14 @@ public class ThControllerImpl implements ThController {
         mav.addObject("requestURI", "/ueber-mich");
         return mav;
     }
+
+    @GetMapping("/produkte/{productId}")
+    public ModelAndView getMethodName(@PathVariable Long productId) {
+        ModelAndView mav = new ModelAndView("produkt");
+        mav.addObject("item", itemService.getItemById(productId));
+        return mav;
+    }
+    
 
 
 }

@@ -27,7 +27,7 @@
                         <small class="text-muted" th:text="${item.category}">Category</small>
                         <p class="card-text" th:text="${item.description}">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
                         <p>Verfügbarkeit: <span th:text="${item.quantity}">0</span> Stück</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <a th:href="${'/produkte/' + item.id}" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>

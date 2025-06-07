@@ -8,5 +8,10 @@
     "name": "api.key.secret",
     "type": "java.lang.String",
     "description": "A description for 'api.key.secret'"
+  },
+  {
+    "name": "app.contact.email",
+    "type": "java.lang.String",
+    "description": "A description for 'app.contact.email'"
   }
 ]}
