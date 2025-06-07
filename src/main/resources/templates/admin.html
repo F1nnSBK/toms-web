@@ -59,7 +59,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Titel</th>
-                        <th scope="col">Beschreibung</th>
+                        <th scope="col" class="d-none d-sm-table-cell">Beschreibung</th>
                         <th scope="col">Erstellt am</th>
                         <th scope="col">Aktionen</th>
                     </tr>
@@ -68,7 +68,7 @@
                     <tr th:each="item, iStat : ${items}">
                         <th scope="row" th:text="${iStat.count}">1</th>
                         <td th:text="${item.name}">Beispiel Artikel</td>
-                        <td th:text="${#strings.abbreviate(item.description, 50)}"  class="d-none d-sm-table-cell">Kurze Beschreibung des Artikels...</td>
+                        <td th:text="${#strings.abbreviate(item.description, 50)}" class="d-none d-sm-table-cell">Kurze Beschreibung des Artikels...</td>
                         <td th:text="${#temporals.format(item.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 10:00</td>
                         <td>
                             <a th:href="@{/admin/items/edit/{id}(id=${item.id})}" class="btn btn-sm btn-outline-primary me-2" title="Bearbeiten">
