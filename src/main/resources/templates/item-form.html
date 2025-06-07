@@ -19,13 +19,13 @@
 
 <div class="container-fluid p-0 d-flex flex-column min-vh-100">
 
-    <div th:insert="fragments/header :: header"></div>
+    <div th:insert="~{fragments/header.html :: header}"></div>
 
     <main class="flex-grow-1 py-4">
         <div class="container">
             <h2 class="mb-5" th:text="${item.id == null ? 'Neuen Artikel erstellen' : 'Artikel bearbeiten'}">Neuer Artikel</h2>
 
-            <form th:action="${item.id == null ? '/admin/items/create' : '/admin/items/' + item.id}" th:object="${item}" method="post">
+            <form th:action="${item.id == null ? '/admin/items/create' : '/admin/items/edit/' + item.id}" th:object="${item}" method="post">
             <div class="row">
                 <div class="col-12 col-lg-6 col-md-6 col-sm-6 mb-3">
                     <label class="form-label" for="name">Name:</label>
@@ -35,7 +35,7 @@
 
                 <div class="col-12 col-lg-6 col-md-6 col-sm-6 mb-3">
                     <label class="form-label" for="description">Beschreibung:</label>
-                    <input class="form-control" type="description" th:field="*{description}">
+                    <input class="form-control" type="text" th:field="*{description}">
                 </div>
 
                 <div class="col-12 col-lg-6 col-md-6 col-sm-6 mb-3">
@@ -68,7 +68,7 @@
         </div>
     </main>
 
-    <div th:insert="fragments/footer.html :: footer"></div>
+    <div th:insert="~{fragments/footer.html :: footer}"></div>
 
 </div>
 

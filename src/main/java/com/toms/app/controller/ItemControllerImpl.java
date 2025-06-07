@@ -46,7 +46,7 @@ public class ItemControllerImpl implements ItemController {
         } catch (NoSuchElementException nse) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item by id not found");
         }
-    }
+    } 
 
     @PutMapping("/{itemId}")
     public ItemDTO updateItem(@PathVariable("itemId") Long id,

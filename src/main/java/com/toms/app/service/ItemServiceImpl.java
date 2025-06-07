@@ -1,5 +1,8 @@
 package com.toms.app.service;
 
+import java.util.Collections;
+import java.util.List;
+import org.springframework.stereotype.Service;
 import com.toms.app.dto.ItemDTO;
 import com.toms.app.mapper.ItemMapper;
 import com.toms.app.model.Item;
@@ -7,11 +10,6 @@ import com.toms.app.repository.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -45,13 +43,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     public ItemDTO getItemById(Long id) {
-        try{
-            return this.itemMapper.itemToItemDTO(this.itemRepository.findById(id).get());
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Item with id " + id +" not found", e);
-        }
+        Item item = itemRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Item with id " + id + " not found"));
+        return itemMapper.itemToItemDTO(item);
     }
-
 
     public ItemDTO updateItem(ItemDTO item) {
         if(itemRepository.existsById(item.getId())) {
