@@ -1,5 +1,8 @@
 package com.toms.app.service;
 
+import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import com.toms.app.dto.UserDTO;
 import com.toms.app.mapper.UserMapper;
 import com.toms.app.model.User;
@@ -7,21 +10,21 @@ import com.toms.app.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserDTO addUser(UserDTO user) {
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
             log.info("Creating user {}", user.getUsername());
             User tmp = this.userMapper.userDTOToUser(user);
             tmp.setId(null);
+            tmp.setPassword(passwordEncoder.encode(user.getPassword()));
             return this.userMapper.userToUserDTO(this.userRepository.save(tmp));
         } catch (Exception e){
             log.error("Error saving user {}", user.getUsername(), e);
@@ -47,15 +51,7 @@ public class UserServiceImpl implements UserService {
 
     public List<UserDTO> findAllUsers(){
         if (userRepository.findAll().isEmpty()) {
-            log.info("No users found, creating default user");
-            addUser(this.userMapper.userToUserDTO(
-                    new User(
-                    "admin",
-                    "admin",
-                    "<EMAIL>",
-                    "ROLE_ADMIN",
-                    "0123456789")
-            ));
+            log.info("No users found");
         }
         return this.userMapper.usersToUserDTOs(userRepository.findAll());
     }
