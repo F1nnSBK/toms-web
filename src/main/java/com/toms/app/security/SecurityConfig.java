@@ -1,9 +1,10 @@
 package com.toms.app.security;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,11 +32,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        ApiKeyAuthFilter apiKeyAuthFilter = new ApiKeyAuthFilter();
-        apiKeyAuthFilter.setAuthenticationManager(apiKeyAuthManager);
+        ApiKeyAuthFilter apiKeyAuthFilter = new ApiKeyAuthFilter(apiKeyAuthManager);
+
+        Set<String> protectedApiPaths = new HashSet<>();
+        protectedApiPaths.add("/api/v1/items/**");
+        protectedApiPaths.add("/api/v1/users/**");
+        apiKeyAuthFilter.setProtectedApiPaths(protectedApiPaths);
+
 
         http
-                // CSRF-Schutz: Deaktiviert für API-Pfade, Standard für alles andere (Formulare)
                 .csrf(csrf -> csrf
                     .ignoringRequestMatchers("/api/v1/**")
                 )
@@ -44,12 +49,21 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkte/**").permitAll()
-                    .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                    // PUBLIC ASSETS (most specific)
+                    .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
 
+                    // PUBLIC API ENDPOINTS (specific to your new data API) - these will bypass ApiKeyAuthFilter
+                    .requestMatchers("/api/v1/public/**").permitAll()
+
+                    // PUBLIC WEB PAGES (your main website pages)
+                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkt/**").permitAll()
+                    .requestMatchers("/login", "/logout").permitAll()
+
+                    // API USERS (these are the ones that are *protected* by ApiKeyAuthFilter)
                     .requestMatchers("/api/v1/items/**").hasRole("API_USER")
                     .requestMatchers("/api/v1/users/**").hasRole("API_USER")
 
+                    // ADMIN PAGES (most restrictive, specific paths)
                     .requestMatchers("/admin/upload").hasRole("ADMIN")
                     .requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
 
@@ -66,10 +80,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
                     .permitAll()
-                )
-                .csrf(Customizer.withDefaults());
-
-
+                );
         return http.build();
     }
 

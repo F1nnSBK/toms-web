@@ -24,9 +24,8 @@
     <main class="flex-grow-1 py-4">
         <div class="container">
             <h2>Deine Artikel</h2>
-            <div class="">
+            <div>
                <a th:href="@{/admin/items/new}" class="btn btn-success px-5 my-4"> Neuer Artikel</a>
-               <button class="btn btn-primary px-5 my-4 mx-3" disabled>Sortierung</button>
             </div>
             <div th:if="${items == null or items.isEmpty()}" class="alert alert-info text-center" role="alert">
                 Bisher keine Artikel vorhanden.
@@ -46,7 +45,7 @@
                     <tr th:each="item, iStat : ${items}">
                         <th scope="row" th:text="${iStat.count}">1</th>
                         <td th:text="${item.name}">Beispiel Artikel</td>
-                        <td th:text="${#strings.abbreviate(item.description, 50)}">Kurze Beschreibung des Artikels...</td>
+                        <td th:text="${#strings.abbreviate(item.description, 50)}" class="d-none d-sm-table-cell">Kurze Beschreibung des Artikels...</td>
                         <td th:text="${#temporals.format(item.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 10:00</td>
                         <td>
                             <a th:href="@{/admin/items/edit/{id}(id=${item.id})}" class="btn btn-sm btn-outline-primary me-2" title="Bearbeiten">

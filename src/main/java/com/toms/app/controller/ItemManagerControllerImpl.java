@@ -1,5 +1,6 @@
 package com.toms.app.controller;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,10 @@ public class ItemManagerControllerImpl implements ItemManagerController {
     @Override
     @GetMapping
     public ModelAndView adminItemManager() {
-        List<ItemDTO> allItems = itemService.getAllItems();
+        List<ItemDTO> allItems = itemService.getAllItems().stream()
+            .sorted(Comparator.comparing(ItemDTO::getCreatedAt).reversed())
+            .toList();
+
         ModelAndView mav = new ModelAndView("itemManager");
         mav.addObject("items", allItems);
         return mav;

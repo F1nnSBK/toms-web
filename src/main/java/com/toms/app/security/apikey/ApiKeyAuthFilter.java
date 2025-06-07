@@ -1,50 +1,69 @@
 package com.toms.app.security.apikey;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Profile("prod")
-public class ApiKeyAuthFilter extends AbstractAuthenticationProcessingFilter {
-    
-    private final String HEADER_NAME = "X-API-KEY";
+public class ApiKeyAuthFilter extends OncePerRequestFilter {
 
-    public ApiKeyAuthFilter() {
-        super(new AntPathRequestMatcher("/api/v1/**"));
+    private final String HEADER_NAME = "X-API-KEY";
+    private final AuthenticationManager authenticationManager;
+    private Set<String> protectedApiPaths = new HashSet<>();
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    public ApiKeyAuthFilter(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
+
+    public void setProtectedApiPaths(Set<String> protectedApiPaths) {
+        this.protectedApiPaths = protectedApiPaths;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-        throws AuthenticationException, IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        String requestUri = request.getRequestURI();
+
+        boolean isProtectedApiPath = false;
+        for (String protectedPath : protectedApiPaths) {
+            if (pathMatcher.match(protectedPath, requestUri)) {
+                isProtectedApiPath = true;
+                break;
+            }
+        }
+
+        if (isProtectedApiPath) {
             String apiKey = request.getHeader(HEADER_NAME);
 
-            if(apiKey == null || apiKey.isEmpty()) {
-                return null;
+            if (apiKey == null || apiKey.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Unauthorized: API Key missing or empty");
+                return;
             }
 
-            ApiKeyAuthentication authRequest = new ApiKeyAuthentication(apiKey);
-            return this.getAuthenticationManager().authenticate(authRequest);
+            try {
+                ApiKeyAuthentication authRequest = new ApiKeyAuthentication(apiKey);
+                Authentication authentication = authenticationManager.authenticate(authRequest);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Unauthorized: Invalid API Key");
+                return;
+            }
         }
 
-        @Override
-        protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-            SecurityContextHolder.getContext().setAuthentication(authResult);
-            chain.doFilter(request, response);
-        }
-
-        @Override
-        protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Unauthorized: Invalid API Key");
-
-        }
+        filterChain.doFilter(request, response);
+    }
 }

@@ -23,8 +23,6 @@
 
     <main class="flex-grow-1 py-4">
         <div class="container">
-            <h1 class="mb-4 text-center">Admin-Dashboard</h1>
-
             <p class="lead text-center mb-5">
                 Willkommen im Admin-Panel, <span sec:authentication="name"></span>! Hier kannst du die Inhalte deiner Webseite verwalten.
             </p>
@@ -70,7 +68,7 @@
                     <tr th:each="item, iStat : ${items}">
                         <th scope="row" th:text="${iStat.count}">1</th>
                         <td th:text="${item.name}">Beispiel Artikel</td>
-                        <td th:text="${#strings.abbreviate(item.description, 50)}">Kurze Beschreibung des Artikels...</td>
+                        <td th:text="${#strings.abbreviate(item.description, 50)}"  class="d-none d-sm-table-cell">Kurze Beschreibung des Artikels...</td>
                         <td th:text="${#temporals.format(item.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2023 10:00</td>
                         <td>
                             <a th:href="@{/admin/items/edit/{id}(id=${item.id})}" class="btn btn-sm btn-outline-primary me-2" title="Bearbeiten">

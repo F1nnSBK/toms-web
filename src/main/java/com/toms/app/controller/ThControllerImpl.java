@@ -34,7 +34,7 @@ public class ThControllerImpl implements ThController {
         List<ItemDTO> items = this.itemService.getAllItems();
 
         ModelAndView mav = new ModelAndView("produkte");
-        mav.addObject("items", items);
+        //mav.addObject("items", items);
         mav.addObject("requestURI", "/produkte");
         return mav;
     }
