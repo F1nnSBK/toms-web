@@ -12,6 +12,8 @@ import com.toms.app.service.ItemService;
 @Controller
 public class ThControllerImpl implements ThController {
 
+    private static final String ATTRIBUTE_REQUEST_NAME = "requestURI";
+
     ItemService itemService;
 
     public ThControllerImpl(ItemService itemService) {
@@ -24,32 +26,28 @@ public class ThControllerImpl implements ThController {
         List<ItemDTO> featuredItems = this.itemService.getFeaturedItems();
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("featuredItems", featuredItems);
-        mav.addObject("requestURI", "/");
+        mav.addObject(ThControllerImpl.ATTRIBUTE_REQUEST_NAME, "/");
         return mav;
     }
 
     @GetMapping("/produkte")
     public ModelAndView products() {
-
-        List<ItemDTO> items = this.itemService.getAllItems();
-
         ModelAndView mav = new ModelAndView("produkte");
-        //mav.addObject("items", items);
-        mav.addObject("requestURI", "/produkte");
+        mav.addObject(ThControllerImpl.ATTRIBUTE_REQUEST_NAME, "/produkte");
         return mav;
     }
 
     @GetMapping("/kontakt")
     public ModelAndView contact() {
         ModelAndView mav = new ModelAndView("kontakt");
-        mav.addObject("requestURI", "/kontakt");
+        mav.addObject(ThControllerImpl.ATTRIBUTE_REQUEST_NAME, "/kontakt");
         return mav;
     }
 
     @GetMapping("/ueber-mich")
     public ModelAndView about() {
         ModelAndView mav = new ModelAndView("ueber-mich");
-        mav.addObject("requestURI", "/ueber-mich");
+        mav.addObject(ThControllerImpl.ATTRIBUTE_REQUEST_NAME, "/ueber-mich");
         return mav;
     }
 

@@ -7,6 +7,7 @@ import com.toms.app.dto.ItemDTO;
 import com.toms.app.mapper.ItemMapper;
 import com.toms.app.model.Item;
 import com.toms.app.repository.ItemRepository;
+import com.toms.app.utils.ItemCreationException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +71,8 @@ public class ItemServiceImpl implements ItemService {
             log.info("Creating new item: {}", item.getName());
             return this.itemMapper.itemToItemDTO(this.itemRepository.save(tmp));
         } catch (Exception e) {
-            throw new RuntimeException("Error adding Item " + item.getName(), e);
+            log.error("Error adding Item " + item.getName(), e);
+            throw new ItemCreationException("Failed to add item: " + item.getName(), e);
         }
     }
 }
