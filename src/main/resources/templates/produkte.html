@@ -68,7 +68,7 @@
 
                 <div class="product-grid mt-4" x-ref="productGrid">
                     <template x-for="item in filteredItems" :key="item.id">
-                        <a :href="'/produkt/' + item.id" class="text-decoration-none">
+                        <a :href="'/produkte/' + item.id" class="text-decoration-none">
                             <div class="card product-card">
                                 <img :src="item.image" :alt="item.name" class="card-img-top">
                                 <div class="card-body">
@@ -76,7 +76,7 @@
                                     <p class="card-category" x-text="'Kategorie: ' + item.category"></p>
                                     <p class="card-text" x-text="item.description"></p>
                                     <div class="card-status">
-                                        <span x-show="item.onlineStatus" class="badge bg-success status-badge">Online verfügbar</span>
+                                        <span x-show="item.onlineStatus" class="badge bg-success status-badge">Verfügbar</span>
                                         <span x-show="!item.onlineStatus" class="badge bg-danger status-badge">Derzeit nicht verfügbar</span>
                                     </div>
                                 </div>

@@ -56,7 +56,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/v1/public/**").permitAll()
 
                     // PUBLIC WEB PAGES (your main website pages)
-                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkt/**").permitAll()
+                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkte/**").permitAll()
                     .requestMatchers("/login", "/logout").permitAll()
 
                     // API USERS (these are the ones that are *protected* by ApiKeyAuthFilter)
