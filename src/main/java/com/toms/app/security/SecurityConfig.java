@@ -41,46 +41,46 @@ public class SecurityConfig {
 
 
         http
-                .csrf(csrf -> csrf
-                    .ignoringRequestMatchers("/api/v1/**")
-                )
-                .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                )
-                .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(authorize -> authorize
-                    // PUBLIC ASSETS (most specific)
-                    .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/v1/**")
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            )
+            .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .authorizeHttpRequests(authorize -> authorize
+                // PUBLIC ASSETS (most specific)
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
 
-                    // PUBLIC API ENDPOINTS (specific to your new data API) - these will bypass ApiKeyAuthFilter
-                    .requestMatchers("/api/v1/public/**").permitAll()
+                // PUBLIC API ENDPOINTS (specific to your new data API) - these will bypass ApiKeyAuthFilter
+                .requestMatchers("/api/v1/public/**").permitAll()
 
-                    // PUBLIC WEB PAGES (your main website pages)
-                    .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkte/**").permitAll()
-                    .requestMatchers("/login", "/logout").permitAll()
+                // PUBLIC WEB PAGES (your main website pages)
+                .requestMatchers("/", "/produkte", "/kontakt", "/ueber-mich", "/produkte/**").permitAll()
+                .requestMatchers("/login", "/logout").permitAll()
 
-                    // API USERS (these are the ones that are *protected* by ApiKeyAuthFilter)
-                    .requestMatchers("/api/v1/items/**").hasRole("API_USER")
-                    .requestMatchers("/api/v1/users/**").hasRole("API_USER")
+                // API USERS (these are the ones that are *protected* by ApiKeyAuthFilter)
+                .requestMatchers("/api/v1/items/**").hasRole("API_USER")
+                .requestMatchers("/api/v1/users/**").hasRole("API_USER")
 
-                    // ADMIN PAGES (most restrictive, specific paths)
-                    .requestMatchers("/admin/upload").hasRole("ADMIN")
-                    .requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
+                // ADMIN PAGES (most restrictive, specific paths)
+                .requestMatchers("/admin/upload").hasRole("ADMIN")
+                .requestMatchers("/admin/**", "/admin").hasRole("ADMIN")
 
-                    .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                    .loginPage("/login")
-                    .permitAll()
-                    .defaultSuccessUrl("/admin", true)
-                )
-                .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                    .permitAll()
-                );
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/admin", true)
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+            );
         return http.build();
     }
 
